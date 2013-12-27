@@ -45,4 +45,11 @@ check-coding-style:
 	    vera++ -rule L001 $$i 2>&1 | sed 's/^/warning: /g' 1>&2; \
 	done; 
 
+guess-version:
+	major=`cat msc_release.h | grep "#define MODSEC_VERSION_MAJOR" | awk {'print $3'} | sed 's/"//g'`
+	minor=`cat msc_release.h | grep "#define MODSEC_VERSION_MINOR" | awk {'print $3'} | sed 's/"//g'`
+	maint=`cat msc_release.h | grep "#define MODSEC_VERSION_MAINT" | awk {'print $3'} | sed 's/"//g'`
+	commit=``
+
+
 .PHONY: test
