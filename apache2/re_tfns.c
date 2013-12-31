@@ -562,13 +562,24 @@ static int msre_fn_md5_execute(apr_pool_t *mptmp, unsigned char *input,
     long int input_len, char **rval, long int *rval_len)
 {
     unsigned char digest[APR_MD5_DIGESTSIZE];
+    int i;
+
+    FILE *fh = fopen("/tmp/testing_hashes.something", "a");
+    fwrite (input, sizeof(char), input_len, fh);
+    fclose(fh);
 
     apr_md5(digest, input, input_len);
 
     *rval_len = APR_MD5_DIGESTSIZE;
     *rval = apr_pstrmemdup(mptmp, (const char *)digest, APR_MD5_DIGESTSIZE);
 
-    return 1;
+    FILE *fhi = fopen("/tmp/testing_hashes.something.info", "a");
+    fprintf(fhi, "content size: %li (bytes?)\n", input_len);
+    fprintf(fhi, "hash: %s\n", bytes2hex(mptmp, *rval, 16));
+    fprintf(fhi, "\n\n");
+    fclose(fhi);
+
+   return 1;
 }
 
 /* sha1 */
